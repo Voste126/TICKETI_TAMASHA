@@ -19,6 +19,8 @@ from django.urls import path
 from events.views import EventViewSet
 from tickets.views import TicketViewSet
 from attendees.views import AttendeeViewSet
+from bookings.views import BookingsViewSet
+from payments.views import PaymentViewSet
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -53,4 +55,12 @@ urlpatterns = [
     #Attendees API for Ticketi tamasha
     path('api/attendees/', AttendeeViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('api/attendees/<pk>/', AttendeeViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
+
+    #Bookings API for Ticketi tamasha
+    path('api/bookings/', BookingsViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('api/bookings/<pk>/', BookingsViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
+
+    #Payments API for Ticketi tamasha
+    path('api/payments/', PaymentViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('api/payments/<pk>/', PaymentViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
 ]
