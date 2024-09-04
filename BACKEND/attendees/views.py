@@ -1,51 +1,55 @@
-from django.shortcuts import render, get_object_or_404
-from rest_framework import viewsets
-from .models import Attendee
+from django.contrib.auth import authenticate
+from rest_framework import generics, status
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from .serializer import AttendeeSerializer
 from rest_framework import generics,status
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
+from .tokens import create_jwt_pair_for_user
 
 #Attendee Management APIView
-class AttendeeViewSet(viewsets.ViewSet):
+class SignUpView(generics.GenericAPIView):
+    serializer_class = AttendeeSerializer
+    permission_classes = []
+    @swagger_auto_schema(operation_description="Sign Up", request_body=AttendeeSerializer, responses={201: AttendeeSerializer()}, operation_summary="Sign Up")
+    def post(self, request: Request):
+        data = request.data
 
-    # get all attendees
-    @swagger_auto_schema(operation_description="Get all attendees", responses={200: AttendeeSerializer(many=True)}, operation_summary="Get all attendees")
-    def list(self, request):
-        queryset = Attendee.objects.all()
-        serializer = AttendeeSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    # create a new attendee
-    @swagger_auto_schema(operation_description="Create a new attendee", request_body=AttendeeSerializer, responses={201: AttendeeSerializer()}, operation_summary="Create a new attendee")
-    def create(self, request):
-        serializer = AttendeeSerializer(data=request.data)
+        serializer = self.serializer_class(data=data)
+
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    # get a specific attendee
-    @swagger_auto_schema(operation_description="Get a specific attendee", responses={200: AttendeeSerializer()}, operation_summary="Get a specific attendee")
-    def retrieve(self, request, pk=None):
-        queryset = Attendee.objects.all()
-        attendee = get_object_or_404(queryset, pk=pk)
-        serializer = AttendeeSerializer(attendee)
-        return Response(serializer.data)
-    
-    # update a specific attendee
-    @swagger_auto_schema(operation_description="Update a specific attendee", request_body=AttendeeSerializer, responses={200: AttendeeSerializer()}, operation_summary="Update a specific attendee")
-    def update(self, request, pk=None):
-        attendee = Attendee.objects.get(pk=pk)
-        serializer = AttendeeSerializer(attendee, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    # delete a specific attendee
-    @swagger_auto_schema(operation_description="Delete a specific attendee", operation_summary="Delete a specific attendee")
-    def destroy(self, request, pk=None):
-        attendee = Attendee.objects.get(pk=pk)
-        attendee.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+
+            response = {"message": "User Created Successfully", "data": serializer.data}
+
+            return Response(data=response, status=status.HTTP_201_CREATED)
+
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LoginView(APIView):
+    permission_classes = []
+
+    @swagger_auto_schema(operation_description="Login", responses={200: AttendeeSerializer()}, operation_summary="Login")
+    def post(self, request: Request):
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        user = authenticate(email=email, password=password)
+
+        if user is not None:
+
+            tokens = create_jwt_pair_for_user(user)
+
+            response = {"message": "Login Successfull", "tokens": tokens}
+            return Response(data=response, status=status.HTTP_200_OK)
+        else:
+            return Response(data={"message": "Invalid email or password"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(operation_description="Get User", responses={200: AttendeeSerializer()}, operation_summary="Get User")
+    def get(self, request: Request):
+        content = {"user": str(request.user), "auth": str(request.auth)}
+
+        return Response(data=content, status=status.HTTP_200_OK)

@@ -18,12 +18,17 @@ from django.contrib import admin
 from django.urls import path
 from events.views import EventViewSet
 from tickets.views import TicketViewSet
-from attendees.views import AttendeeViewSet
+from attendees.views import SignUpView, LoginView
 from bookings.views import BookingsViewSet
 from payments.views import PaymentViewSet
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -53,8 +58,8 @@ urlpatterns = [
     path('api/tickets/<pk>/', TicketViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
 
     #Attendees API for Ticketi tamasha
-    path('api/attendees/', AttendeeViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('api/attendees/<pk>/', AttendeeViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
+    path('api/signup/', SignUpView.as_view(), name='signup'),
+    path('api/login/', LoginView.as_view(), name='login'),
 
     #Bookings API for Ticketi tamasha
     path('api/bookings/', BookingsViewSet.as_view({'get': 'list', 'post': 'create'})),
@@ -63,4 +68,8 @@ urlpatterns = [
     #Payments API for Ticketi tamasha
     path('api/payments/', PaymentViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('api/payments/<pk>/', PaymentViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
+
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]

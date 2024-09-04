@@ -1,24 +1,31 @@
 from rest_framework import serializers
-from attendees.models import Attendee
+from rest_framework.exceptions import ValidationError
+from rest_framework.authtoken.models import Token
+from .models import Attendee
 
-# Serializer for the Attendee model
 class AttendeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendee
-        fields = ['attendee_id', 'name', 'email', 'phone', 'created_at', 'updated_at']
+        fields = ["email", "username", "password"]
 
-    
-    def validate_email(self, value):
-        # Ensure the email is in the correct format (though this is already handled by EmailField)
-        if '@' not in value:
-            raise serializers.ValidationError("Email must be in the correct format")
-        return value
-
-    
-    name = serializers.CharField(max_length=100)
+    username = serializers.CharField(max_length=50)
     email = serializers.EmailField()
-    phone = serializers.CharField(max_length=12)
-    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
-    updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
+    password = serializers.CharField(max_length=50, write_only=True)
 
+    def validate(self, attrs):
+        email_exists = Attendee.objects.filter(email=attrs["email"]).exists()
+        if email_exists:
+            raise ValidationError("Email has already been used")
+        return super().validate(attrs)
 
+def create(self, validated_data):
+    attendee = Attendee.objects.create_user(
+        username=validated_data['username'],
+        email=validated_data['email'],
+        password=validated_data['password']
+    )
+    attendee.set_password(validated_data['password'])
+    attendee.save()
+    
+    token = Token.objects.create(user=attendee)
+    return attendee
