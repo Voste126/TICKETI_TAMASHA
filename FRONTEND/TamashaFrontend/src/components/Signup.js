@@ -1,4 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import {
   MDBBtn,
   MDBContainer,
@@ -12,34 +16,54 @@ import {
 } from 'mdb-react-ui-kit';
 
 function SignUp() {
+
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios.post('http://localhost:8000/auth/signup/', formData)
+      .then(response => {
+        toast.success("Signup Successful!");
+        // move to the login form after successful signup in about 5 seconds
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 5000);
+      })
+      .catch(error => {
+        toast.error("Signup Failed. Please try again.");
+      });
+  };
+
+
+
   return (
     <MDBContainer fluid className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', padding: '0' }}>
       <div className="w-100" style={{ backgroundImage: 'url(https://mdbootstrap.com/img/new/textures/full/171.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '60px 0' }}>
         
         <MDBCard className='mx-auto my-5 p-5 shadow-5' style={{ maxWidth: '600px', background: 'hsla(0, 0%, 100%, 0.8)', backdropFilter: 'blur(30px)', borderRadius: '15px' }}>
           <MDBCardBody className='p-5 text-center'>
-
+          <ToastContainer />
             <h2 className="fw-bold mb-5">Sign up now</h2>
-
-            <MDBRow>
-              <MDBCol md='6'>
-                <MDBInput wrapperClass='mb-4' label='First name' id='form1' type='text' />
-              </MDBCol>
-
-              <MDBCol md='6'>
-                <MDBInput wrapperClass='mb-4' label='Last name' id='form2' type='text' />
-              </MDBCol>
-            </MDBRow>
-
-            <MDBInput wrapperClass='mb-4' label='Email' id='form3' type='email' />
-            <MDBInput wrapperClass='mb-4' label='Password' id='form4' type='password' />
-
+          <form onSubmit={handleSubmit}>
+            <MDBInput  label='Username' name='username' onChange={handleInputChange} className='mb-4' required />
+            <MDBInput  label='Email' name='email' type='email' onChange={handleInputChange} className='mb-4' required />
+            <MDBInput  label='Password' name='password' type='password' onChange={handleInputChange} className='mb-4' required />
+            <MDBBtn  type='submit' size='md' className='w-100 mb-4' style={{ backgroundColor: '#E63946', color: '#F1FAEE' }}>Sign up</MDBBtn>
             <div className='d-flex justify-content-center mb-4'>
               <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
             </div>
-
-            <MDBBtn href='/login' className='w-100 mb-4' size='md' style={{ backgroundColor: '#E63946', color: '#F1FAEE' }}>Sign up</MDBBtn>
-
+          </form>
             <div className="text-center">
 
               <p>or sign up with:</p>

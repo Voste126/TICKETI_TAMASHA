@@ -29,7 +29,7 @@ export default function AboutUs() {
                     <MDBCol md='6'>
                         <div style={{ textAlign: 'center' }}>
                             <img
-                                    src='https://mdbootstrap.com/img/new/standard/city/042.webp'
+                                    src='https://media.istockphoto.com/id/1181169462/photo/are-you-ready-to-party.jpg?s=170667a&w=0&k=20&c=TDHZGHWiB4dg8762I0p1utuR44LjVnYgg8chp_AJsWk='
                                     className='img-fluid shadow-2-strong'
                                     alt='Contact Us' style={{ width: '100%', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
                                     />

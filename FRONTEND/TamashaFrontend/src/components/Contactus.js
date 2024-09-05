@@ -29,7 +29,7 @@ export default function Contactus() {
                     <MDBCol md='6'>
                         <div style={{ textAlign: 'center' }}>
                             <img
-                                    src='https://mdbootstrap.com/img/new/standard/city/042.webp'
+                                    src='https://media.istockphoto.com/id/502688035/fr/photo/foule-de-concert.jpg?s=170667a&w=0&k=20&c=FX6LucHBhVsU56JVmcHy0DPJ5RcAd-rfeTc46KRSYAc='
                                     className='img-fluid shadow-2-strong'
                                     alt='Contact Us' style={{ width: '100%', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
                                     />
