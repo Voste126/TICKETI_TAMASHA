@@ -2,13 +2,13 @@ from rest_framework import serializers
 from bookings.models import Bookings
 from events.models import Event
 from tickets.models import Ticket
-from attendees.models import Attendee
+from accounts.models import User
 
 # Serializer for the Bookings model
 class BookingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bookings
-        fields = ['booking_id', 'event_id', 'ticket_id', 'attendee_id', 'quantity', 'created_at', 'updated_at']
+        fields = ['booking_id', 'event_id', 'ticket_id', 'user_id', 'quantity', 'created_at', 'updated_at']
     
     def validate_quantity(self, value):
         if value < 1:
@@ -18,7 +18,7 @@ class BookingsSerializer(serializers.ModelSerializer):
     booking_id = serializers.UUIDField(read_only=True)
     event_id = serializers.UUIDField()
     ticket_id = serializers.UUIDField()
-    attendee_id = serializers.UUIDField()
+    user_id = serializers.UUIDField()
     quantity = serializers.IntegerField()
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
     updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
@@ -27,7 +27,7 @@ class BookingsSerializer(serializers.ModelSerializer):
         # Convert UUIDs to actual model instances
         event = Event.objects.get(pk=validated_data.pop('event_id'))
         ticket = Ticket.objects.get(pk=validated_data.pop('ticket_id'))
-        attendee = Attendee.objects.get(pk=validated_data.pop('attendee_id'))
+        attendee = User.objects.get(pk=validated_data.pop('user_id'))
 
         booking = Bookings.objects.create(
             event_id=event,
@@ -42,8 +42,8 @@ class BookingsSerializer(serializers.ModelSerializer):
             instance.event_id = Event.objects.get(pk=validated_data.get('event_id'))
         if 'ticket_id' in validated_data:
             instance.ticket_id = Ticket.objects.get(pk=validated_data.get('ticket_id'))
-        if 'attendee_id' in validated_data:
-            instance.attendee_id = Attendee.objects.get(pk=validated_data.get('attendee_id'))
+        if 'user_id' in validated_data:
+            instance.user_id = User.objects.get(pk=validated_data.get('attendee_id'))
 
         instance.quantity = validated_data.get('quantity', instance.quantity)
         instance.save()

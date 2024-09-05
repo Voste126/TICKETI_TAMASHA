@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from events.views import EventViewSet
 from tickets.views import TicketViewSet
-from attendees.views import SignUpView, LoginView
+from accounts.views import SignUpView, LoginView
 from bookings.views import BookingsViewSet
 from payments.views import PaymentViewSet
 from rest_framework import permissions
@@ -57,9 +57,9 @@ urlpatterns = [
     path('api/tickets/', TicketViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('api/tickets/<pk>/', TicketViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
 
-    #Attendees API for Ticketi tamasha
-    path('api/signup/', SignUpView.as_view(), name='signup'),
-    path('api/login/', LoginView.as_view(), name='login'),
+    #Accounts API for Ticketi tamasha
+    path('auth/signup/', SignUpView.as_view()),
+    path('auth/login/', LoginView.as_view()),
 
     #Bookings API for Ticketi tamasha
     path('api/bookings/', BookingsViewSet.as_view({'get': 'list', 'post': 'create'})),
@@ -69,7 +69,7 @@ urlpatterns = [
     path('api/payments/', PaymentViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('api/payments/<pk>/', PaymentViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
 
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('auth/jwt/create/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/jwt/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/jwt/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
