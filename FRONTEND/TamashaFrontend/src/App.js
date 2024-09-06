@@ -7,8 +7,9 @@ import EventCard from './components/EventCard';
 import EventList from './components/EventList';
 import CreateEvent from './components/CreateEvent';
 import PaymentForm from './components/PaymentForm';
+import EventDetails from './components/EventDetails';
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Switch } from 'react-router-dom';
 function App() {
   return (
     <Router>
@@ -17,9 +18,10 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/" element={<Layout />} />
         <Route path="/eventcard" element={<EventCard />} />
-        <Route path="/eventlist" element={<EventList />} />
+        <Route path="/events" element={<EventList />} />
         <Route path="/createevent" element={<CreateEvent />} />
         <Route path="/pay" element={<PaymentForm />} />
+        <Route path="/events/:event_id" element={<EventDetails/>} />
       </Routes>
     </Router>
   );

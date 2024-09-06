@@ -36,7 +36,7 @@ export default function Navbar() {
               </MDBNavbarLink>
             </MDBNavbarItem>
             <MDBNavbarItem>
-              <MDBNavbarLink href='/eventlist' style={{ color: '#F1FAEE' }}>
+              <MDBNavbarLink href='/events' style={{ color: '#F1FAEE' }}>
                 Events
               </MDBNavbarLink>
             </MDBNavbarItem>
