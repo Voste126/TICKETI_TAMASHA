@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-r45+8esq@txb=xifolmis4e$p!5fa8h)j17ntj%!xac_4q1bww
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -68,9 +68,11 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
 
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000"
+]
 
 ROOT_URLCONF = 'Tamasha.urls'
 

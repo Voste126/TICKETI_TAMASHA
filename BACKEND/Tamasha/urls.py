@@ -51,7 +51,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #Events API for Ticketi tamasha
     path('api/events/', EventViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('api/events/<pk>/', EventViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
+    path('api/events/<uuid:pk>/', EventViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
 
     #Tickets API for Ticketi tamasha
     path('api/tickets/', TicketViewSet.as_view({'get': 'list', 'post': 'create'})),
