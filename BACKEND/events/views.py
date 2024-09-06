@@ -4,11 +4,13 @@ from .models import Event
 from .serializer import EventSerializer
 from rest_framework import generics,status
 from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema  # for custom swagger documentation
+from drf_yasg.utils import swagger_auto_schema 
+from rest_framework.permissions import IsAuthenticated
 
 #Event Management APIView
 class EventViewSet(viewsets.ViewSet):
 
+    permission_classes = [IsAuthenticated]
     # get all events
     @swagger_auto_schema(operation_description="Get all events", responses={200: EventSerializer(many=True)}, operation_summary="Get all events")
     def list(self, request):

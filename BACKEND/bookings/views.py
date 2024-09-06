@@ -5,6 +5,8 @@ from .serializer import BookingsSerializer
 from rest_framework import generics,status
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
+#permission classes in django
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
