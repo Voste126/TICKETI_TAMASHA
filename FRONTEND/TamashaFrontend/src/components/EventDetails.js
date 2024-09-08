@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { validate as uuidValidate } from 'uuid';
 import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBCardImage, MDBBtn, MDBSpinner } from 'mdb-react-ui-kit';
 
+
 function EventDetails() {
   const {event_id} = useParams();
+  const navigate = useNavigate();
   const id = event_id;
   const [event, setEvent] = useState(null); // State to hold the event data
   const [loading, setLoading] = useState(true); // Loading state
@@ -36,7 +38,10 @@ function EventDetails() {
       setLoading(false); // Disable loading if the UUID is invalid
     }
   }, [event_id]);
-
+    // Function to navigate to the tickets page
+  const handleViewTickets = () => {
+    navigate(`/event/${event_id}/tickets/`); // Navigates to the tickets page with event_id
+  };
   // Loading spinner while fetching data
   if (loading) {
     return (
@@ -83,7 +88,13 @@ function EventDetails() {
               <MDBCardText>
                 <strong>Location:</strong> {event.location}
               </MDBCardText>
-              <MDBBtn href='/events' style={{ backgroundColor: '#E63946', borderRadius: '50px', fontWeight: 'bold' }}>Back to Events</MDBBtn>
+              {/* Button to navigate to the event's tickets */}
+              <MDBBtn onClick={handleViewTickets} style={{ backgroundColor: '#457B9D', borderRadius: '50px', fontWeight: 'bold', marginRight: '10px' }}>
+                View Tickets
+              </MDBBtn>
+              <MDBBtn href='/events' style={{ backgroundColor: '#E63946', borderRadius: '50px', fontWeight: 'bold' }}>
+                Back to Events
+              </MDBBtn>
             </MDBCardBody>
           </MDBCol>
         </MDBRow>

@@ -41,6 +41,11 @@ export default function Navbar() {
               </MDBNavbarLink>
             </MDBNavbarItem>
             <MDBNavbarItem>
+              <MDBNavbarLink href='/tickets' style={{ color: '#F1FAEE' }}>
+                Tickets
+              </MDBNavbarLink>
+            </MDBNavbarItem>
+            <MDBNavbarItem>
               <MDBNavbarLink href='/pay' style={{ color: '#F1FAEE' }}>
                 Payment
               </MDBNavbarLink>

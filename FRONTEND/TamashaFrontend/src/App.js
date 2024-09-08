@@ -1,5 +1,4 @@
 import React from 'react';
-import { MDBContainer } from 'mdb-react-ui-kit';
 import Login from './components/Login';
 import SignUp from './components/Signup';
 import Layout from './components/Layout';
@@ -8,6 +7,9 @@ import EventList from './components/EventList';
 import CreateEvent from './components/CreateEvent';
 import PaymentForm from './components/PaymentForm';
 import EventDetails from './components/EventDetails';
+import CreateEventTicket from './components/createTickets';
+import Tickets from './components/Tickets';
+
 
 import { BrowserRouter as Router, Route, Routes, Switch } from 'react-router-dom';
 function App() {
@@ -20,8 +22,10 @@ function App() {
         <Route path="/eventcard" element={<EventCard />} />
         <Route path="/events" element={<EventList />} />
         <Route path="/createevent" element={<CreateEvent />} />
+        <Route path="/event/:event_id/ticket" element={<CreateEventTicket />} />
         <Route path="/pay" element={<PaymentForm />} />
         <Route path="/events/:event_id" element={<EventDetails/>} />
+        <Route path="/event/:event_id/tickets/" element={<Tickets />} />
       </Routes>
     </Router>
   );

@@ -29,16 +29,13 @@ export default function EventCard({ event }) {
       </MDBRipple>
       <MDBCardBody className='text-center'>
         <MDBCardTitle className='mb-3' style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1D3557' }}>{event.title}</MDBCardTitle>
-        <MDBCardText style={{ fontSize: '1rem', color: '#555' }}>Event ID:{event.event_id}</MDBCardText>
         <MDBCardText style={{ fontSize: '0.9rem', color: '#555' }}>
           {event.description.substring(0, 50)}...
         </MDBCardText>
-        <MDBBtn href={`/events/${event.id}`} style={{ backgroundColor: '#457B9D', borderRadius: '50px', padding: '12px 24px', fontWeight: 'bold', marginRight: '10px' }}>
-          <MDBIcon icon='info-circle' className='me-2' />
-          Learn More
-        </MDBBtn>
-        <Link to={`/events/`+ event.event_id}>learn more</Link>
-        <MDBBtn href='/pay' style={{ backgroundColor: '#E63946', borderRadius: '50px', padding: '8px 16px', fontWeight: 'bold' }}>
+        <Link to={`/events/`+ event.event_id} style={{ backgroundColor: 'black', borderRadius: '50px', padding: '8px 16px', fontWeight: 'bold', marginRight: '10px' }}><MDBIcon icon='info-circle' className='me-2' />
+          Learn More</Link>
+
+        <MDBBtn href='/pay' style={{ backgroundColor: '#E63946', borderRadius: '50px', padding: '8px 16px', fontWeight: 'bold', marginRight:'10px' }}>
           <MDBIcon icon='shopping-cart' className='me-2' />
           Buy Now
         </MDBBtn>

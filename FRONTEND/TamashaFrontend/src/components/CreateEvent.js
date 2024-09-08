@@ -1,19 +1,9 @@
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBCard,
-  MDBCardBody,
-  MDBCol,
-  MDBRow,
-  MDBInput,
-  MDBTextArea
-} from 'mdb-react-ui-kit';
-
+import { MDBBtn, MDBContainer, MDBCard, MDBCardBody, MDBCol, MDBRow, MDBInput, MDBTextArea } from 'mdb-react-ui-kit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useNavigate } from 'react-router-dom';
 
 function CreateEvent() {
   const [eventData, setEventData] = useState({
@@ -21,8 +11,12 @@ function CreateEvent() {
     description: '',
     date: '',
     location: '',
-    image_url: ''
+    image_url: '',
+    tickets_available: '',
+    organizer: ''
   });
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -41,27 +35,34 @@ function CreateEvent() {
         'Authorization': `Bearer ${token}`  // Include the JWT token
       }
     })
-      .then((response) => {
-        toast.success('Event created successfully!');
-        setEventData({
-          title: '',
-          description: '',
-          date: '',
-          location: '',
-          image_url: ''
-        });
-        // Redirect to the home page after successful event creation
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 5000);
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 403) {
-          toast.error('Authorization error: Please login again.');
-        } else {
-          toast.error('Failed to create event. Please try again.');
-        }
+    .then((response) => {
+      toast.success('Event created successfully!');
+      setEventData({
+        title: '',
+        description: '',
+        date: '',
+        location: '',
+        image_url: '',
+        tickets_available: '',
+        organizer: ''
       });
+      console.log(response.data); 
+      const event_id = response.data.event_id;  // Assuming the event ID is returned in the response
+
+      // Redirect to the create tickets page with the event ID
+      // Adjust the timeout as needed
+      setTimeout(() => {
+        navigate(`/event/${event_id}/ticket`);
+    }, 2000);
+
+    })
+    .catch((error) => {
+      if (error.response && error.response.status === 403) {
+        toast.error('Authorization error: Please login again.');
+      } else {
+        toast.error('Failed to create event. Please try again.');
+      }
+    });
   };
 
   return (
@@ -70,10 +71,10 @@ function CreateEvent() {
         
         <MDBCard className='mx-auto my-5 p-5 shadow-5' style={{ maxWidth: '800px', background: 'hsla(0, 0%, 100%, 0.8)', backdropFilter: 'blur(30px)', borderRadius: '15px' }}>
           <MDBCardBody className='p-5 text-center'>
-          <ToastContainer />
+            <ToastContainer />
             <h2 className="fw-bold mb-5">Create an Event</h2>
 
-              <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
               <MDBRow>
                 <MDBCol md='6'>
                   <MDBInput 
@@ -91,8 +92,10 @@ function CreateEvent() {
                   <MDBInput 
                     wrapperClass='mb-4' 
                     label='Organizer Name' 
-                    id='organizerName' 
-                    type='text' 
+                    id='organizer' 
+                    type='text'
+                    value={eventData.organizer}
+                    onChange={handleChange} 
                     required
                   />
                 </MDBCol>
@@ -116,6 +119,15 @@ function CreateEvent() {
                 onChange={handleChange} 
                 required
               />
+              <MDBInput
+                wrapperClass='mb-4'
+                label='Tickets Available'
+                id='tickets_available'
+                type='number'
+                value={eventData.tickets_available}
+                onChange={handleChange}
+                required
+              />
               <MDBTextArea 
                 wrapperClass='mb-4' 
                 label='Event Description' 
@@ -136,10 +148,9 @@ function CreateEvent() {
 
               <MDBBtn type='submit' className='w-100 mb-4' size='md' style={{ backgroundColor: '#E63946', color: '#F1FAEE' }}>Create Event</MDBBtn>
             </form>
-            <MDBBtn href='/' className='w-100 mb-4' size='md' style={{ backgroundColor: 'green', color: '#F1FAEE' }}>Back To home</MDBBtn>
+            <MDBBtn href='/' className='w-100 mb-4' size='md' style={{ backgroundColor: 'green', color: '#F1FAEE' }}>Back To Home</MDBBtn>
           </MDBCardBody>
         </MDBCard>
-
       </div>
     </MDBContainer>
   );
