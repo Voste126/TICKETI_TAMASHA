@@ -14,7 +14,7 @@ class Ticket(models.Model):
     ]
     
     ticket_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')  # Better naming convention
     ticket_type = models.CharField(max_length=100, choices=TICKET_CHOICES, default='REGULAR')
     price = models.FloatField(validators=[MinValueValidator(0.01)])
     quantity = models.IntegerField(validators=[MinValueValidator(1)])
@@ -30,5 +30,6 @@ class Ticket(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.ticket_type
+        return f"{self.ticket_type} - {self.event.title}"
