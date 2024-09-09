@@ -26,16 +26,17 @@ class BookingsViewSet(viewsets.ViewSet):
         quantity = request.data.get('quantity')  # Extract quantity from request data
 
         # Validate event and ticket
-        event = get_object_or_404(Event, id=event_id)
-        ticket = get_object_or_404(Ticket, id=ticket_id)
+        event = get_object_or_404(Event, event_id=event_id)
+        ticket = get_object_or_404(Ticket, ticket_id=ticket_id)
 
         # Prepare the booking data
         booking_data = {
-            'user': user.id,
-            'event': event.id,
-            'ticket': ticket.id,
+            'user': user.id,  # This is fine since the User model uses `id`
+            'event': event.event_id,  # Use event.event_id instead of event.id
+            'ticket': ticket.ticket_id,  # Use ticket.ticket_id instead of ticket.id
             'quantity': quantity
         }
+
 
         serializer = BookingsSerializer(data=booking_data)
 
