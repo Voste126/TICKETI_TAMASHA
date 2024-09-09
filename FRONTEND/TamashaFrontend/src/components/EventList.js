@@ -34,7 +34,7 @@ export default function EventList() {
       <ToastContainer />
       <MDBRow className='g-4'>
         {events.map((event) => (
-          <MDBCol md='3' key={event.title}>
+          <MDBCol md='3' key={event.event_id}>
             <EventCard event={event} /> {/* Pass event data as a prop */}
           </MDBCol>
         ))}

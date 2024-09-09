@@ -14,7 +14,7 @@ function Tickets() {
 
     useEffect(() => {
         const token = localStorage.getItem('access_token'); // Get the token from localStorage
-
+        console.log("Event ID from URL:", event_id);
         // Fetch event details
         axios.get(`http://localhost:8000/api/events/${event_id}/`, {
             headers: {
@@ -51,27 +51,31 @@ function Tickets() {
         });
     };
 
-    const handleBookTicket = (ticket_id) => {
+    const handleBookTicket = async (ticket_id) => {
         const token = localStorage.getItem('access_token'); // Get the token from localStorage
-        const quantity = quantities[ticket_id] || 1; // Use entered quantity or default to 1
-    
-        axios.post('http://localhost:8000/api/bookings/', {
-            ticket: ticket_id,  // Send the ticket ID
-            event: event_id,    // Send the event ID
-            quantity: quantity  // Send the ticket quantity
-        }, {
+        const quantity = quantities[ticket_id] || 1; 
+        const bookingData = {
+            event: event_id,   // Ensure event_id is defined
+            ticket: ticket_id,  // Ensure ticketId is defined
+            quantity: quantity, // Ensure bookingQuantity is defined
+        };
+        console.log("Booking Data:", bookingData);
+
+        try {
+            const response = await axios.post('http://localhost:8000/api/bookings/', bookingData, {
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${token}`, // Ensure token is defined
             },
-        })
-        .then(response => {
+            });
             toast.success('Ticket booked successfully!');
-        })
-        .catch(error => {
-            console.error("Error booking ticket:", error.response.data);
-            toast.error('Failed to book ticket. Please try again later.');
-        });
-    };
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                toast.error('Booking failed. Please try again.');
+            } else {
+                toast.error('Booking failed. Please try again.');
+            }
+        }
+        };
 
     if (loading) {
         return (
