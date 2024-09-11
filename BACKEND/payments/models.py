@@ -13,6 +13,7 @@ class Payment(models.Model):
     payment_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     booking_id = models.OneToOneField(Bookings, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
     payment_method = models.CharField(max_length=100, choices=PAYMENT_METHOD_CHOICES, default='MP')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
