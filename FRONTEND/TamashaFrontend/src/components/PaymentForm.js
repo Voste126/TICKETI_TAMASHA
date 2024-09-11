@@ -1,74 +1,113 @@
 import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 import {
-  MDBBtn,
   MDBContainer,
   MDBRow,
   MDBCol,
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBBtn,
   MDBInput,
-  MDBSelect,
-  MDBSelectInput,
-  MDBSelectOptions,
-  MDBSelectOption
 } from 'mdb-react-ui-kit';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function PaymentForm() {
-  const [paymentMethod, setPaymentMethod] = useState('');
+  const { booking_id } = useParams(); // Use the booking ID from the URL
+  const [paymentMethod, setPaymentMethod] = useState('MP');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [amount, setAmount] = useState('');
+  const navigate = useNavigate();
 
   const handlePaymentMethodChange = (e) => {
     setPaymentMethod(e.target.value);
   };
 
+  const handlePhoneNumberChange = (e) => {
+    setPhoneNumber(e.target.value);
+  };
+
+  const handlePayment = async () => {
+    const token = localStorage.getItem('access_token'); // Get the token from localStorage
+    const paymentData = {
+      booking_id: booking_id, // Pass the booking_id to the backend
+      amount: amount,
+      payment_method: paymentMethod,
+      ...(paymentMethod === 'MP' && { phone_number: phoneNumber }), // Add phone_number if MPESA is selected
+    };
+
+    try {
+      const response = await axios.post('http://localhost:8000/api/payments/', paymentData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success('Payment successful!');
+      setInterval(() => {
+        navigate('/events'); // Redirect to success page after payment
+      }
+      , 4000);
+ // Redirect to success page after payment
+    } catch (error) {
+      toast.error('Payment failed. Please try again.');
+    }
+  };
+
   return (
-    <MDBContainer className="my-5 gradient-form" style={{ maxWidth: '900px', borderRadius: '10px', boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)' }}>
-      <MDBRow className="g-0">
-        {/* Payment Form */}
-        <MDBCol col='12'>
-          <div className="d-flex flex-column p-4">
-            <div className="text-center">
-              <img
-                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
-                style={{ width: '150px' }}
-                alt="logo"
+    <MDBContainer className="py-5">
+      <MDBRow className="justify-content-center">
+        <MDBCol md="6">
+          <MDBCard className="shadow-5" style={{ borderRadius: '15px' }}>
+            <MDBCardBody>
+              <MDBCardTitle className="text-center mb-4">Payment Form</MDBCardTitle>
+              <ToastContainer />
+              {/* Amount Input */}
+              <MDBInput
+                label="Amount"
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                required
+                className="mb-4"
               />
-              <h4 className="mt-3 mb-4 pb-1" style={{ fontWeight: 'bold', color: '#1D3557' }}>Tiketi Tamasha</h4>
-            </div>
 
-            <p style={{ fontSize: '1rem', color: '#343A40' }}>Please complete your payment</p>
+              {/* Payment Method Select */}
+              <div className="mb-4">
+                <label htmlFor="paymentMethod" className="form-label">
+                  Payment Method
+                </label>
+                <select
+                  id="paymentMethod"
+                  className="form-select"
+                  value={paymentMethod}
+                  onChange={handlePaymentMethodChange}
+                >
+                  <option value="MP">MPESA</option>
+                  <option value="CC">Credit Card</option>
+                  <option value="DC">Debit Card</option>
+                  <option value="MC">MasterCard</option>
+                </select>
+              </div>
 
-            <MDBInput wrapperClass='mb-4' label='Booking ID' id='form1' type='text' style={{ borderColor: '#1D3557' }} />
-            <MDBInput wrapperClass='mb-4' label='Amount' id='form2' type='number' style={{ borderColor: '#1D3557' }} />
+              {/* Phone Number Input for MPESA */}
+              {paymentMethod === 'MP' && (
+                <MDBInput
+                  label="Phone Number"
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={handlePhoneNumberChange}
+                  required
+                  className="mb-4"
+                />
+              )}
 
-            <select
-              className="mb-4 form-select"
-              value={paymentMethod}
-              onChange={handlePaymentMethodChange}
-              style={{ borderColor: '#1D3557' }}
-            >
-              <option value="">Select Payment Method</option>
-              <option value="MP">MPESA</option>
-              <option value="CC">Credit Card</option>
-              <option value="DC">Debit Card</option>
-              <option value="MC">MasterCard</option>
-            </select>
-
-            {paymentMethod === 'MP' && (
-              <MDBInput wrapperClass='mb-4' label='Phone Number' id='form3' type='tel' style={{ borderColor: '#1D3557' }} />
-            )}
-
-            {paymentMethod === 'CC' || paymentMethod === 'DC' || paymentMethod === 'MC' ? (
-              <>
-                <MDBInput wrapperClass='mb-4' label='Card Number' id='form4' type='text' style={{ borderColor: '#1D3557' }} />
-                <MDBInput wrapperClass='mb-4' label='Card Expiry Date' id='form5' type='text' style={{ borderColor: '#1D3557' }} />
-                <MDBInput wrapperClass='mb-4' label='CVV' id='form6' type='text' style={{ borderColor: '#1D3557' }} />
-              </>
-            ) : null}
-
-            <div className="text-center pt-1 mb-5 pb-1">
-              <MDBBtn className="mb-4 w-100" style={{ backgroundColor: '#E63946', color: '#F1FAEE' }}>Make Payment</MDBBtn>
-            <MDBBtn href='/' className='w-100 mb-4' size='md' style={{ backgroundColor: 'green', color: '#F1FAEE' }}>Back To home</MDBBtn>
-            </div>
-          </div>
+              <MDBBtn color="success" className="mt-3" onClick={handlePayment}>
+                Pay Now
+              </MDBBtn>
+            </MDBCardBody>
+          </MDBCard>
         </MDBCol>
       </MDBRow>
     </MDBContainer>
@@ -76,5 +115,4 @@ function PaymentForm() {
 }
 
 export default PaymentForm;
-
 

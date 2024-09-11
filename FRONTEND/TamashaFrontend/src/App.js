@@ -11,7 +11,8 @@ import CreateEventTicket from './components/createTickets';
 import Tickets from './components/Tickets';
 
 
-import { BrowserRouter as Router, Route, Routes, Switch } from 'react-router-dom';
+
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 function App() {
   return (
     <Router>
@@ -23,7 +24,7 @@ function App() {
         <Route path="/events" element={<EventList />} />
         <Route path="/createevent" element={<CreateEvent />} />
         <Route path="/event/:event_id/ticket" element={<CreateEventTicket />} />
-        <Route path="/pay" element={<PaymentForm />} />
+        <Route path="/payment/:booking_id" element={<PaymentForm />} />
         <Route path="/events/:event_id" element={<EventDetails/>} />
         <Route path="/event/:event_id/tickets/" element={<Tickets />} />
       </Routes>

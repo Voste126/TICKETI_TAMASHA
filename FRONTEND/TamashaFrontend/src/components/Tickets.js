@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState} from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBCardImage, MDBSpinner, MDBBtn, MDBInput } from 'mdb-react-ui-kit';
 import { ToastContainer, toast } from 'react-toastify';
@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function Tickets() {
     const { event_id } = useParams(); // Get event_id from the URL
     const [tickets, setTickets] = useState([]);
+    const navigate = useNavigate(); 
     const [eventDetails, setEventDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [quantities, setQuantities] = useState({}); // State to hold ticket quantities
@@ -68,6 +69,7 @@ function Tickets() {
             },
             });
             toast.success('Ticket booked successfully!');
+            navigate(`/payment/${response.data.booking_id}`);
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 toast.error('Booking failed. Please try again.');
@@ -167,5 +169,3 @@ function Tickets() {
 }
 
 export default Tickets;
-
-
