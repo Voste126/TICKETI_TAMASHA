@@ -103,9 +103,13 @@ WSGI_APPLICATION = 'Tamasha.wsgi.application'
 #         'PORT': os.getenv('DB_PORT'),
 #     }
 # }
+# Database configuration for Render deployment
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://...')
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL')
+    )
 }
+
 
 
 
@@ -143,7 +147,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 # Configure static file storage
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
