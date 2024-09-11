@@ -11,11 +11,13 @@ django-phonenumber-field==8.0.0
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
 drf-yasg==1.21.7
+gunicorn==23.0.0
 idna==3.8
 inflection==0.5.1
 packaging==24.1
 phonenumbers==8.13.43
 pillow==10.4.0
+psycopg2-binary==2.9.9
 pycparser==2.22
 PyJWT==2.9.0
 python-decouple==3.8
