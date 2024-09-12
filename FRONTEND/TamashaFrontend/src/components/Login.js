@@ -21,6 +21,10 @@ function Login() {
     };
 
   const handleLogin = (e) => {
+    if (!apiUrl) {
+            toast.error("API URL is not defined");
+            return;
+        }
     e.preventDefault();
     axios.post(`${apiUrl}auth/login/`, credentials)
       .then(response => {
