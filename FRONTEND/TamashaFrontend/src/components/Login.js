@@ -14,6 +14,7 @@ import './Login.css';
 
 function Login() {
     const apiUrl = process.env.REACT_APP_API_URL;
+    console.log(apiUrl);
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     
     const handleChange = (e) => {
@@ -21,6 +22,7 @@ function Login() {
     };
 
   const handleLogin = (e) => {
+    console.log(apiUrl);
     if (!apiUrl) {
             toast.error("API URL is not defined");
             return;
