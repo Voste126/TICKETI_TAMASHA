@@ -13,6 +13,7 @@ function EventDetails() {
   const [loading, setLoading] = useState(true); // Loading state
    
   useEffect(() => {
+    const apiUrl = process.env.REACT_APP_API_URL;
     console.log("Event ID:", event_id); 
     const token = localStorage.getItem('access_token'); // Get the token from localStorage
     
@@ -20,7 +21,7 @@ function EventDetails() {
       // Fetch event details based on the event ID
       //api/events/<uuid:pk>/
 
-      axios.get(`http://localhost:8000/api/events/${event_id}/`,{
+      axios.get(`${apiUrl}api/events/${event_id}/`,{
         headers: {
             'Authorization': `Bearer ${token}`,
         },

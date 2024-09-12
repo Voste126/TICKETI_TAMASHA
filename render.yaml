@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: tamasha-frontend
+    env: docker
+    plan: free
+    dockerfilePath: FRONTEND/TamashaFrontend/Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+    buildCommand: npm install && npm run build
+    startCommand: serve -s build -l 3000

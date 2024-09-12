@@ -15,7 +15,7 @@ function CreateEvent() {
     tickets_available: '',
     organizer: ''
   });
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const navigate = useNavigate(); // Initialize useNavigate
 
   const handleChange = (e) => {
@@ -30,7 +30,7 @@ function CreateEvent() {
     const token = localStorage.getItem('access_token');
 
     // Send POST request to the server
-    axios.post('http://localhost:8000/api/events/', eventData, {
+    axios.post(`${apiUrl}api/events/`, eventData, {
       headers: {
         'Authorization': `Bearer ${token}`  // Include the JWT token
       }

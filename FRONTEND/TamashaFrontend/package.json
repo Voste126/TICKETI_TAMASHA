@@ -39,6 +39,18 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "react-scripts": "5.0.1"
+    "@babel/plugin-transform-private-methods": "^7.21.11",
+    "@babel/plugin-transform-class-properties": "^7.21.11",
+    "@babel/plugin-transform-optional-chaining": "^7.21.11"
+  },
+  "babel": {
+    "presets": ["@babel/preset-env", "@babel/preset-react"],
+    "plugins": [
+      "@babel/plugin-proposal-private-property-in-object",
+      "@babel/plugin-transform-private-methods",
+      "@babel/plugin-transform-class-properties",
+      "@babel/plugin-transform-optional-chaining"
+    ]
   }
+
 }

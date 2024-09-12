@@ -12,6 +12,7 @@ function CreateEventTicket() {
     const [quantity, setQuantity] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate(); // Initialize useNavigate
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     const TICKET_CHOICES = [
         { value: 'EARLY_BIRD', label: 'Early Bird' },
@@ -26,7 +27,7 @@ function CreateEventTicket() {
         setLoading(true);
         const token = localStorage.getItem('access_token'); // Get the token from localStorage
         
-        axios.post('http://localhost:8000/api/tickets/', {
+        axios.post(`${apiUrl}api/tickets/`, {
             event: event_id, // Send the event ID
             ticket_type: ticketType,
             price: parseFloat(price),

@@ -30,6 +30,7 @@ function PaymentForm() {
   };
 
   const handlePayment = async () => {
+    const apiUrl = process.env.REACT_APP_API_URL;
     const token = localStorage.getItem('access_token'); // Get the token from localStorage
     const paymentData = {
       booking_id: booking_id, // Pass the booking_id to the backend
@@ -39,7 +40,7 @@ function PaymentForm() {
     };
 
     try {
-      const response = await axios.post('http://localhost:8000/api/payments/', paymentData, {
+      const response = await axios.post(`${apiUrl}api/payments/`, paymentData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

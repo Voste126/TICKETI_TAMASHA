@@ -14,14 +14,14 @@ import './Login.css';
 
 function Login() {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
-
+    const apiUrl = process.env.REACT_APP_API_URL;
     const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8000/auth/login/', credentials)
+    axios.post(`${apiUrl}auth/login/`, credentials)
       .then(response => {
         localStorage.setItem('access_token', response.data.token.access);
         localStorage.setItem('refresh_token', response.data.token.refresh);

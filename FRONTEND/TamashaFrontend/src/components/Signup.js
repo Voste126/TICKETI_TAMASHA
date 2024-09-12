@@ -16,7 +16,7 @@ import {
 } from 'mdb-react-ui-kit';
 
 function SignUp() {
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -32,7 +32,7 @@ function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8000/auth/signup/', formData)
+    axios.post(`${apiUrl}auth/signup/`, formData)
       .then(response => {
         toast.success("Signup Successful!");
         // move to the login form after successful signup in about 5 seconds

@@ -8,13 +8,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function EventList() {
   const [events, setEvents] = useState([]);
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   // Fetch events from the backend when the component mounts
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        const response = await axios.get('http://localhost:8000/api/events/', {
+        const response = await axios.get(`${apiUrl}api/events/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

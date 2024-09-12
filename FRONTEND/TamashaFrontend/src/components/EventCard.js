@@ -32,13 +32,11 @@ export default function EventCard({ event }) {
         <MDBCardText style={{ fontSize: '0.9rem', color: '#555' }}>
           {event.description.substring(0, 50)}...
         </MDBCardText>
-        <Link to={`/events/`+ event.event_id} style={{ backgroundColor: 'black', borderRadius: '50px', padding: '8px 16px', fontWeight: 'bold', marginRight: '10px' }}><MDBIcon icon='info-circle' className='me-2' />
+        <Link to={`/events/`+ event.event_id} style={{ backgroundColor: 'green', borderRadius: '50px', padding: '8px 16px', fontWeight: 'bold', marginRight: '10px', color: 'black' }}><MDBIcon icon='info-circle' className='me-2' />
           Learn More</Link>
 
-        <MDBBtn href='/pay' style={{ backgroundColor: '#E63946', borderRadius: '50px', padding: '8px 16px', fontWeight: 'bold', marginRight:'10px' }}>
-          <MDBIcon icon='shopping-cart' className='me-2' />
-          Buy Now
-        </MDBBtn>
+        <Link to={`/events/`+ event.event_id} style={{ backgroundColor: 'Red', borderRadius: '50px', padding: '8px 16px', fontWeight: 'bold', marginRight: '10px', color: 'black' }}><MDBIcon icon='info-circle' className='me-2' />
+          Buy Now</Link>
       </MDBCardBody>
     </MDBCard>
   );
