@@ -22,7 +22,7 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    axios.post('https://ticketi-tamasha-1.onrender.com/auth/login/', credentials)
+    axios.post(`${apiUrl}auth/login/`, credentials)
       .then(response => {
         localStorage.setItem('access_token', response.data.token.access);
         localStorage.setItem('refresh_token', response.data.token.refresh);

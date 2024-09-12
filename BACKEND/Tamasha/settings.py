@@ -66,7 +66,20 @@ MIDDLEWARE = [
 
 
 CORS_ALLOWED_ORIGINS = [
+    "https://ticketi-tamasha.onrender.com",
     "http://localhost:3000"
+]
+
+# If you need to allow specific headers or methods
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+]
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'OPTIONS',
 ]
 
 ROOT_URLCONF = 'Tamasha.urls'
