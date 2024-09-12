@@ -4,14 +4,14 @@ FROM node:lts-alpine AS builder
 # Set the working directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json
-COPY package.json package-lock.json ./
+# Copy package.json and package-lock.json from the correct location
+COPY FRONTEND/TamashaFrontend/package.json FRONTEND/TamashaFrontend/package-lock.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application code
-COPY . .
+COPY FRONTEND/TamashaFrontend ./
 
 # Build the React application
 RUN npm run build
