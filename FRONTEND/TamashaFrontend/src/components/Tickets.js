@@ -17,7 +17,7 @@ function Tickets() {
         const token = localStorage.getItem('access_token'); // Get the token from localStorage
         console.log("Event ID from URL:", event_id);
         // Fetch event details
-        axios.get(`http://localhost:8000/api/events/${event_id}/`, {
+        axios.get(`https://ticketi-tamasha-1.onrender.com/api/events/${event_id}/`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -30,7 +30,7 @@ function Tickets() {
         });
 
         // Fetch tickets for the event
-        axios.get(`http://localhost:8000/api/tickets/?event_id=${event_id}`, {
+        axios.get(`https://ticketi-tamasha-1.onrender.com/api/tickets/?event_id=${event_id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -63,7 +63,7 @@ function Tickets() {
         console.log("Booking Data:", bookingData);
 
         try {
-            const response = await axios.post('http://localhost:8000/api/bookings/', bookingData, {
+            const response = await axios.post('https://ticketi-tamasha-1.onrender.com/api/bookings/', bookingData, {
             headers: {
                 'Authorization': `Bearer ${token}`, // Ensure token is defined
             },
