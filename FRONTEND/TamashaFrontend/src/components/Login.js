@@ -15,6 +15,7 @@ import './Login.css';
 function Login() {
     const apiUrl = process.env.REACT_APP_API_URL;
     console.log(apiUrl);
+    
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     
     const handleChange = (e) => {
@@ -28,8 +29,9 @@ function Login() {
             return;
         }
     e.preventDefault();
-    axios.post(`${apiUrl}auth/login/`, credentials)
+    axios.post('https://ticketi-tamasha-1.onrender.com/auth/login/', credentials)
       .then(response => {
+        console.log(response.data);
         localStorage.setItem('access_token', response.data.token.access);
         localStorage.setItem('refresh_token', response.data.token.refresh);
         toast.success("Login successful!");

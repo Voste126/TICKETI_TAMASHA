@@ -32,7 +32,7 @@ function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post(`${apiUrl}auth/signup/`, formData)
+    axios.post('https://ticketi-tamasha-1.onrender.com/auth/signup/', formData)
       .then(response => {
         toast.success("Signup Successful!");
         // move to the login form after successful signup in about 5 seconds
