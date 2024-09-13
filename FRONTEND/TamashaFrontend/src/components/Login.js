@@ -24,10 +24,6 @@ function Login() {
 
   const handleLogin = (e) => {
     console.log(apiUrl);
-    if (!apiUrl) {
-            toast.error("API URL is not defined");
-            return;
-        }
     e.preventDefault();
     axios.post('https://ticketi-tamasha-1.onrender.com/auth/login/', credentials)
       .then(response => {
