@@ -40,7 +40,7 @@ function PaymentForm() {
     };
 
     try {
-      const response = await axios.post(`${apiUrl}api/payments/`, paymentData, {
+      const response = await axios.post('https://ticketi-tamasha-1.onrender.com/api/payments/', paymentData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

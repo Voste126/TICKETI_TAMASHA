@@ -8,7 +8,7 @@ class Event(models.Model):
     description = models.TextField()
     date = models.DateTimeField()
     location = models.CharField(max_length=100)
-    image_url = models.URLField(blank=True)
+    image_url = models.URLField(blank=True, null=True,max_length=1000)
     tickets_available = models.IntegerField()
     organizer = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)

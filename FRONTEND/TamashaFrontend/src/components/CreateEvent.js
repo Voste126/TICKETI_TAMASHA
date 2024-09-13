@@ -30,7 +30,7 @@ function CreateEvent() {
     const token = localStorage.getItem('access_token');
 
     // Send POST request to the server
-    axios.post(`${apiUrl}api/events/`, eventData, {
+    axios.post('https://ticketi-tamasha-1.onrender.com/api/events/', eventData, {
       headers: {
         'Authorization': `Bearer ${token}`  // Include the JWT token
       }

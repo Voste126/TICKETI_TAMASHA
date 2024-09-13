@@ -21,7 +21,7 @@ function EventDetails() {
       // Fetch event details based on the event ID
       //api/events/<uuid:pk>/
 
-      axios.get(`${apiUrl}api/events/${event_id}/`,{
+      axios.get(`https://ticketi-tamasha-1.onrender.com/api/events/${event_id}/`,{
         headers: {
             'Authorization': `Bearer ${token}`,
         },

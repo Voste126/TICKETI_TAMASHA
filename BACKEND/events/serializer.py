@@ -10,7 +10,7 @@ class EventSerializer(serializers.ModelSerializer):
     location = serializers.CharField(max_length=100)
     tickets_available = serializers.IntegerField()
     organizer = serializers.CharField(max_length=100)
-    image_url = serializers.URLField()
+    image_url = serializers.URLField(max_length=1000, allow_blank=True, allow_null=True)
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
     updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
 
