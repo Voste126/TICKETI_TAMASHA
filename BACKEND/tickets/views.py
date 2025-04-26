@@ -1,74 +1,47 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework.permissions import IsAuthenticated
-
+from rest_framework import status
+from django.shortcuts import get_object_or_404
 from .models import Ticket
-from .serializer import TicketSerializer
-from events.models import Event  # Import Event model
+from events.models import Event
+import qrcode
+import os
+from django.conf import settings
 
-class TicketViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
+class TicketPurchaseView(APIView):
+    def post(self, request, event_id):
+        event = get_object_or_404(Event, id=event_id)
 
-    @swagger_auto_schema(
-        operation_description="Get all tickets",
-        responses={200: TicketSerializer(many=True)},
-        operation_summary="Get all tickets"
-    )
-    def list(self, request):
-        queryset = Ticket.objects.all()
-        serializer = TicketSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if event.capacity <= 0:
+            return Response({'error': 'Event is sold out'}, status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(
-        operation_description="Create a new ticket",
-        request_body=TicketSerializer,
-        responses={201: TicketSerializer()},
-        operation_summary="Create a new ticket"
-    )
-    def create(self, request):
-        # Get the event ID from the request data
-        event_id = request.data.get('event')
-        # Validate that the event ID exists
-        event = get_object_or_404(Event, event_id=event_id)
+        price_paid = event.price_KES
+        ticket = Ticket.objects.create(
+            event=event,
+            user=request.user,
+            price_paid=price_paid
+        )
 
-        # Create the ticket with the associated event
-        serializer = TicketSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(event=event)  # Associate the ticket with the event
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Generate QR code
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(str(ticket.id))
+        qr.make(fit=True)
 
-    @swagger_auto_schema(
-        operation_description="Get a specific ticket",
-        responses={200: TicketSerializer()},
-        operation_summary="Get a specific ticket"
-    )
-    def retrieve(self, request, pk=None):
-        ticket = get_object_or_404(Ticket, pk=pk)
-        serializer = TicketSerializer(ticket)
-        return Response(serializer.data)
+        qr_code_path = os.path.join(settings.MEDIA_ROOT, f'qr_codes/{ticket.id}.png')
+        os.makedirs(os.path.dirname(qr_code_path), exist_ok=True)
+        qr_code_image = qr.make_image(fill_color="black", back_color="white")
+        qr_code_image.save(qr_code_path)
 
-    @swagger_auto_schema(
-        operation_description="Update a specific ticket",
-        request_body=TicketSerializer,
-        responses={200: TicketSerializer()},
-        operation_summary="Update a specific ticket"
-    )
-    def update(self, request, pk=None):
-        ticket = get_object_or_404(Ticket, pk=pk)
-        serializer = TicketSerializer(ticket, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        ticket.qr_code = f'qr_codes/{ticket.id}.png'
+        ticket.save()
 
-    @swagger_auto_schema(
-        operation_description="Delete a specific ticket",
-        operation_summary="Delete a specific ticket"
-    )
-    def destroy(self, request, pk=None):
-        ticket = get_object_or_404(Ticket, pk=pk)
-        ticket.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        # Decrement event capacity
+        event.capacity -= 1
+        event.save()
+
+        return Response({'message': 'Ticket purchased successfully', 'qr_code_url': ticket.qr_code}, status=status.HTTP_201_CREATED)

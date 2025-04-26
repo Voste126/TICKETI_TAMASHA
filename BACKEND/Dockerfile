@@ -1,27 +1,22 @@
-# Use the Python 3 slim image
-FROM python:3-slim
+# Use the official Python image as a base image
+FROM python@sha256:3c5e2b2e8b3d5b9b8c2e8e8d5b6b3c5e2b2e8b3d5b9b8c2e8e8d5b6b3c5e2b2
 
-EXPOSE 8000
-
-# Keeps Python from generating .pyc files in the container
-ENV PYTHONDONTWRITEBYTECODE=1
-
-# Turns off buffering for easier container logging
-ENV PYTHONUNBUFFERED=1
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 # Set the working directory
 WORKDIR /app
 
-# Copy the requirements file and install pip requirements
-COPY BACKEND/requirements.txt /app/
-RUN python -m pip install -r requirements.txt
+# Install dependencies
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire project into the container
-COPY BACKEND /app
+# Copy the project files
+COPY . /app/
 
-# Create a non-root user with an explicit UID and add permissions to access the /app folder
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-USER appuser
+# Expose the port the app runs on
+EXPOSE 8000
 
-# Run Gunicorn server
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "Tamasha.wsgi:application"]
+# Run the application
+CMD ["gunicorn", "TAMASHA.wsgi:application", "--bind", "0.0.0.0:8000"]

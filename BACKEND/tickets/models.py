@@ -1,35 +1,15 @@
 from django.db import models
+from django.conf import settings
 from events.models import Event
-from django.core.validators import MinValueValidator
 import uuid
-from django.core.exceptions import ValidationError
 
 class Ticket(models.Model):
-    TICKET_CHOICES = [
-        ('EARLY_BIRD', 'Early Bird'),
-        ('REGULAR', 'Regular'),
-        ('VIP', 'VIP'),
-        ('VVIP', 'VVIP'),
-        ('EXECUTIVE', 'Executive'),
-    ]
-    
-    ticket_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')  # Better naming convention
-    ticket_type = models.CharField(max_length=100, choices=TICKET_CHOICES, default='REGULAR')
-    price = models.FloatField(validators=[MinValueValidator(0.01)])
-    quantity = models.IntegerField(validators=[MinValueValidator(1)])
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def clean(self):
-        try:
-            uuid.UUID(str(self.ticket_id))
-        except ValueError:
-            raise ValidationError('Invalid UUID format for ticket_id')
-
-    def save(self, *args, **kwargs):
-        self.clean()
-        super().save(*args, **kwargs)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tickets')
+    purchase_timestamp = models.DateTimeField(auto_now_add=True)
+    price_paid = models.DecimalField(max_digits=10, decimal_places=2)
+    qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
 
     def __str__(self):
-        return f"{self.ticket_type} - {self.event.title}"
+        return f'Ticket {self.id} for {self.event.title}'
