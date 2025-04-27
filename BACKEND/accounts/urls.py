@@ -1,11 +1,13 @@
 from django.urls import path
-from .views import LoginView,  RegistrationView, LogoutView, PasswordResetRequestView, PasswordResetVerifyView, UpdateCredentialsView
+from .views import RegistrationAPIView, LoginAPIView, VerifyEmailAPIView, LogoutAPIView, ForgetPasswordAPIView, ResetPasswordAPIView, GenerateNewOTPView
+
 
 urlpatterns = [
-    path('update-credentials/', UpdateCredentialsView.as_view(), name='update_credentials'),
-    path('password-reset/request/', PasswordResetRequestView.as_view(), name='password_reset_request'),
-    path('password-reset/verify/', PasswordResetVerifyView.as_view(), name='password_reset_verify'),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('register/', RegistrationView.as_view(), name='register'),
+    path('register/', RegistrationAPIView.as_view(), name='register'),
+    path('login/', LoginAPIView.as_view(), name='login'),
+    path('verify-email/', VerifyEmailAPIView.as_view(), name='verify_email'),
+    path('logout/', LogoutAPIView.as_view(), name='logout'),
+    path('forget-password/', ForgetPasswordAPIView.as_view(), name='forget_password'),
+    path('reset-password/', ResetPasswordAPIView.as_view(), name='reset_password'),
+    path('generate-new-otp/', GenerateNewOTPView.as_view(), name='generate_new_otp'),
 ]
