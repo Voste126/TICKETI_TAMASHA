@@ -1,20 +1,18 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 from django.shortcuts import get_object_or_404
 from .models import Ticket
 from events.models import Event
 import qrcode
 import os
 from django.conf import settings
-from django.http import JsonResponse
 
 class TicketPurchaseView(APIView):
     def post(self, request, event_id):
         try:
             event = get_object_or_404(Event, id=event_id)
             if event.capacity <= 0:
-                return Response({'error': 'Event is sold out'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message": "Event is sold out."}, status=400)
 
             price_paid = event.price_KES
             ticket = Ticket.objects.create(
@@ -37,11 +35,11 @@ class TicketPurchaseView(APIView):
             qr_code_image = qr.make_image(fill_color="black", back_color="white")
             qr_code_image.save(qr_code_path)
 
-            return JsonResponse({
-                'message': 'Ticket purchased successfully',
-                'ticket_id': ticket.id,
-                'qr_code_path': qr_code_path
-            }, status=status.HTTP_201_CREATED)
+            return Response({
+                "message": "Ticket purchased successfully.",
+                "ticket_id": str(ticket.id),
+                "qr_code_path": qr_code_path
+            }, status=201)
 
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"message": "An error occurred.", "error": str(e)}, status=500)
