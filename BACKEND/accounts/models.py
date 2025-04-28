@@ -1,5 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
 
 class UserManager(BaseUserManager):
     def create_user(self, email, phone_number, password=None, **extra_fields):
@@ -62,3 +65,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+@receiver(post_delete, sender=User)
+def delete_outstanding_tokens(sender, instance, **kwargs):
+    OutstandingToken.objects.filter(user=instance).delete()
