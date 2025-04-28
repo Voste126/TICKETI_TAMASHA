@@ -10,6 +10,8 @@ class Ticket(models.Model):
     purchase_timestamp = models.DateTimeField(auto_now_add=True)
     price_paid = models.DecimalField(max_digits=10, decimal_places=2)
     qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
+    payment_status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('completed', 'Completed'), ('failed', 'Failed')], default='pending')
+    payment_method = models.CharField(max_length=20, choices=[('stripe', 'Stripe'), ('mpesa', 'MPESA')], blank=True, null=True)
 
     def __str__(self):
         return f'Ticket {self.id} for {self.event.title}'
