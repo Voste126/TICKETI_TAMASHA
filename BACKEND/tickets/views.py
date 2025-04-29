@@ -13,8 +13,11 @@ from .serializers import (
     StripePaymentPayloadSerializer,
     StripePaymentResponseSerializer,
     MPESAPaymentPayloadSerializer,
-    MPESAPaymentResponseSerializer
+    MPESAPaymentResponseSerializer,
+    TicketSerializer
 )
+from rest_framework.permissions import IsAdminUser
+from rest_framework.decorators import permission_classes
 
 class TicketPurchaseView(APIView):
     @swagger_auto_schema(
@@ -150,3 +153,23 @@ class MPESAPaymentSimulationView(APIView):
             }, status=200)
         except Exception as e:
             return Response({"message": "An error occurred.", "error": str(e)}, status=500)
+
+class EventTicketsView(APIView):
+    """
+    API view to retrieve all tickets bought for a specific event.
+    Accessible by event managers and admins.
+    """
+    @swagger_auto_schema(
+        operation_summary="Get Tickets for an Event",
+        operation_description="Retrieve all tickets purchased for a specific event.",
+        responses={
+            200: TicketSerializer(many=True),
+            404: "Event not found."
+        }
+    )
+    @permission_classes([IsAdminUser])
+    def get(self, request, event_id):
+        event = get_object_or_404(Event, id=event_id)
+        tickets = Ticket.objects.filter(event=event)
+        serializer = TicketSerializer(tickets, many=True)
+        return Response(serializer.data, status=200)
