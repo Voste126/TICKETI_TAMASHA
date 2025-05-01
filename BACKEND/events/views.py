@@ -1,3 +1,6 @@
+# This file contains a ModelViewSet for CRUD operations on events.
+# It includes permission checks to restrict access based on user roles.
+
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied

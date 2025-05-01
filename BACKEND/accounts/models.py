@@ -1,3 +1,7 @@
+# This file defines the custom User model and its manager.
+# The User model includes fields for email, phone number, role, and more.
+# It also includes a signal to delete outstanding tokens when a user is deleted.
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.db.models.signals import post_delete

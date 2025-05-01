@@ -1,3 +1,5 @@
+# This file maps URLs to views for ticket-related operations such as purchase and payment simulations.
+
 from django.urls import path
 from .views import TicketPurchaseView, StripePaymentSimulationView, MPESAPaymentSimulationView, EventTicketsView
 

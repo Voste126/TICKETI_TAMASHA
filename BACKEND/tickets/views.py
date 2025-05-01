@@ -1,3 +1,6 @@
+# This file contains API views for ticket-related operations, including purchasing tickets and simulating payments.
+# It also includes QR code generation for purchased tickets.
+
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response

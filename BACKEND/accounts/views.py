@@ -1,3 +1,6 @@
+# This file contains API views for user-related operations, including registration, login, and email verification.
+# Swagger documentation is included for better API visibility.
+
 import random
 import logging
 from datetime import timedelta

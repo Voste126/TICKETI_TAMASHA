@@ -1,3 +1,5 @@
+# This file maps URLs to views for user-related operations such as registration, login, and password management.
+
 from django.urls import path
 from .views import RegistrationAPIView, LoginAPIView, VerifyEmailAPIView, LogoutAPIView, ForgetPasswordAPIView, ResetPasswordAPIView, GenerateNewOTPView
 

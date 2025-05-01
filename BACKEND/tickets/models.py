@@ -1,3 +1,5 @@
+# This file defines the Ticket model, which includes fields for event, user, price paid, and payment status.
+
 from django.db import models
 from django.conf import settings
 from events.models import Event
