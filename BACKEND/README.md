@@ -52,6 +52,26 @@ docker-compose exec web python manage.py createsuperuser
 - Swagger Documentation: `http://localhost:8000/swagger/`
 - Admin Panel: `http://localhost:8000/admin/`
 
+### Running the Project with Docker (Without Docker Compose)
+
+1. Build the Docker image:
+
+```bash
+docker build -t tiketi_tamasha_backend .
+```
+
+2. Run the Docker container:
+
+```bash
+docker run -p 8000:8000 tiketi_tamasha_backend
+```
+
+3. Access the application:
+
+- API: `http://localhost:8000`
+- Swagger Documentation: `http://localhost:8000/swagger/`
+- Admin Panel: `http://localhost:8000/admin/`
+
 ### Additional Commands
 
 - Run tests:
