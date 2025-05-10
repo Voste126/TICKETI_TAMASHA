@@ -239,6 +239,7 @@ Fork the repository.
 Create a new branch for your feature or fix.
 Push your changes to your fork.
 Open a pull request on the main repository.
+Thanks to Moringa school for this project
 
 ## Deployment on Render
 
